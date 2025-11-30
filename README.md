@@ -23,7 +23,7 @@ This is a Python command-line tool which reads a list of city from the text file
 4. Run the program:
 
    ```
-   python weather.py cities.py
+   python weather.py cities.txt
    ```
 
 ## Output
@@ -31,4 +31,4 @@ This is a Python command-line tool which reads a list of city from the text file
 * Individual temperatures of the cities
 * Highest, lowest, and average
 * Saved automatically to `output.json`
-* 
+  
