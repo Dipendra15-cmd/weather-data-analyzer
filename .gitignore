@@ -30,3 +30,5 @@ Thumbs.db
 
 # Jupyter Notebook Checkpoints
 .ipynb_checkpoints/
+
+weather_output.json

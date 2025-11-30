@@ -101,8 +101,8 @@ def get_city_coordinates(city_name: str) -> Optional[Tuple[float, float, str]]:
 def get_current_weather_for_coordinates(lat: float, lon: float) -> Optional[
     dict]:
     """
-    Fetches data using the OpenMeteo API for the current weather.
-    Returns the data if successful, or None if not.
+    Fetches the current weather data for a given pair of latitude and longitude.
+    Returns a dictionary with weather data (temperature, windspeed, etc.) if successful, or None if not.
     """
     params = {
         "latitude": lat,
@@ -153,6 +153,42 @@ def save_to_json(file_path: str, data: dict) -> None:
         print(
             f"[error] Failed to save data to {file_path}: {e}", file=sys.stderr
         )
+
+
+def save_to_csv(file_path: str, data: dict) -> None:
+    """Generates csv data and saves it to a file."""
+    import csv
+    try:
+        with open(file_path, "w", newline="", encoding="utf-8") as csv_file:
+            writer = csv.DictWriter(
+                csv_file, fieldnames=["city", "temperature", "windspeed",
+                                      "winddirection", "timestamp"]
+            )
+            writer.writeheader()
+
+            for city, weather_info in data.items():
+                if city != "stats":
+                    writer.writerow(
+                        {
+                            "city": city,
+                            "temperature": weather_info.get("temperature"),
+                            "windspeed": weather_info.get("windspeed"),
+                            "winddirection": weather_info.get("winddirection"),
+                            "timestamp": weather_info.get("timestamp"),
+                        }
+                    )
+
+            stats = data.get("stats")
+            if stats:
+                csv_file.write("\n# Statistics\n")
+                for key, value in stats.items():
+                    csv_file.write(f"# {key}: {value}\n")
+        print(f"[info] Data successfully saved to {file_path}")
+    except Exception as e:
+        print(
+            f"[error] Failed to save data to {file_path}: {e}", file=sys.stderr
+        )
+
 
 def print_weather_summary(data: dict) -> None:
     if not data:
